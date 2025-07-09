@@ -86,7 +86,8 @@ def main():
     result_df = pd.DataFrame({"ID": test_meta_df["ID"], "target": all_predictions})
 
     # 결과 저장
-    output_filename = add_timestamp_prefix("sample_submission.csv")
+    original_name = f"{model_name}_lr{model.hparams.learning_rate}_ep{model.hparams.max_epochs}"
+    output_filename = add_timestamp_prefix(f"{original_name}_submission.csv")
     output_path = config.PREDICTION_DIR / output_filename
     result_df.to_csv(output_path, index=False)
     logger.info(f"예측 결과 저장 완료: {output_path}")
