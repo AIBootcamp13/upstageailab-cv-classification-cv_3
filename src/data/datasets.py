@@ -53,8 +53,8 @@ class DocumentImageSet(Dataset):
         from src import config
 
         return cls(
-            meta_csv_filepath=config.TRAIN_META_CSV_PATH,
-            img_directory=config.TRAIN_IMG_DIR,
+            meta_csv_filepath=config.RAW_DATA_DIR / "augment.csv",
+            img_directory=config.RAW_DATA_DIR / "augment",
             class_meta_csv_filepath=config.CLASS_META_CSV_PATH,
             img_transform=img_transform if img_transform else transforms.ToTensor(),
         )

@@ -19,7 +19,7 @@ def parse_args():
     parser.add_argument(
         "--model-name",
         type=str,
-        default="convnextv2_tiny",
+        default="convnext_small",
         help="timm 기준의 사전학습된 모델 이름(예시. convnext_tiny, convnext_small 등)",
     )
     parser.add_argument("--learning-rate", type=float, default=5e-4, help="학습률")
@@ -77,11 +77,23 @@ def main():
     criterion = nn.CrossEntropyLoss()
 
     # model 정의
+    # ConvNextV2-Base 모델 생성 (10,000장 데이터용)
     model = DocumentImageClassifier(
-        model_name=args.model_name,
+        model_name="convnextv2_base",
         num_classes=DocumentImageSet.calculate_metadata_classes(),
-        learning_rate=args.learning_rate,
-        criterion=criterion,
+        learning_rate=5e-5,  # 낮은 학습률
+        weight_decay=0.1,  # 높은 weight decay
+        drop_rate=0.3,  # 30% dropout (강함)
+        drop_path_rate=0.3,  # 30% drop path (강함)
+        # 옵티마이저/스케줄러 설정
+        optimizer_name="adamw",
+        scheduler_name="cosine_warm_restarts",  # 워밍업이 있는 코사인
+        warmup_epochs=10,  # 긴 워밍업
+        max_epochs=150,
+        # 강한 정규화
+        label_smoothing=0.1,
+        mixup_alpha=0.3,  # 더 강한 MixUp
+        cutmix_alpha=1.0,  # CutMix 추가
     )
     logger.info("model 정의 완료")
 
