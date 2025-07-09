@@ -16,7 +16,7 @@ def parse_args():
     parser.add_argument("--checkpoint-path", type=str, required=True, help="학습된 모델 체크포인트 경로")
     parser.add_argument("--batch-size", type=int, default=64, help="예측 배치 사이즈")
     parser.add_argument("--num-workers", type=int, default=4, help="데이터 로딩에 사용할 worker 개수")
-    parser.add_argument("--pin-memory", action="store_true", help="데이터 로딩에 pin_memory 사용")
+    parser.add_argument("--pin-memory", type=bool, default=False, help="데이터 로딩에 pin_memory 사용")
     parser.add_argument("--seed", type=int, default=4321, help="랜덤 시드 설정")
 
     return parser.parse_args()

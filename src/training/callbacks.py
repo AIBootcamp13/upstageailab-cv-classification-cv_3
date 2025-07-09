@@ -3,7 +3,7 @@ from pytorch_lightning.callbacks import Callback, EarlyStopping, LearningRateMon
 from src import config
 
 
-def get_callbacks(monitor: str = "val_loss") -> list[Callback]:
+def get_callbacks(monitor: str = "val_f1") -> list[Callback]:
     return [
         # 모델 체크포인트 저장
         ModelCheckpoint(

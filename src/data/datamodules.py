@@ -184,7 +184,7 @@ class DocumentImageDataModule(LightningDataModule):
             DataLoader: 예측 데이터셋을 위한 데이터 로더
         """
         return DataLoader(
-            self.test_dataset,
+            self.predict_dataset,
             batch_size=self.batch_size,
             shuffle=False,
             num_workers=self.num_workers,

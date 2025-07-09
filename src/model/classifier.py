@@ -1,7 +1,7 @@
 import timm
 import torchmetrics
 from pytorch_lightning import LightningModule
-from torch import Tensor, argmax, nn, optim
+from torch import Tensor, argmax, nn, optim, stack
 
 
 class DocumentImageClassifier(LightningModule):
@@ -137,24 +137,34 @@ class DocumentImageClassifier(LightningModule):
 
         return loss
 
-    def predict_step(self, batch: tuple[Tensor, Tensor], batch_idx: int, dataloader_idx: int = 0) -> Tensor:
+    def predict_step(
+        self, batch: tuple[Tensor, Tensor] | list | Tensor, batch_idx: int, dataloader_idx: int = 0
+    ) -> Tensor:
         """
         예측 단계
 
         Args:
-            batch (torch.Tensor): 입력 이미지 배치
-            batch_idx (int): 배치 인덱스
-            dataloader_idx (int): 데이터로더 인덱스
+            batch: 입력 데이터 배치 (tuple, list, 또는 Tensor)
+            batch_idx: 배치 인덱스
+            dataloader_idx: 데이터로더 인덱스
 
         Returns:
-            torch.Tensor: 예측 결과
+            torch.Tensor: 예측 결과 (클래스 인덱스)
         """
-        if isinstance(batch, tuple):
+        # batch 형태 확인 및 이미지 추출
+        if isinstance(batch, (list, tuple)) and len(batch) == 2:
             images, _ = batch
         else:
             images = batch
 
+        # 이미지가 리스트인 경우 텐서로 변환
+        if isinstance(images, list):
+            images = stack(images)
+
+        # 모델 추론
         predictions = self(images)
+
+        # 클래스 인덱스 반환
         return argmax(predictions, dim=1)
 
     def configure_optimizers(self) -> tuple:
