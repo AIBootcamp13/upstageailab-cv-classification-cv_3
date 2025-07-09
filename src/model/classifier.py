@@ -157,9 +157,11 @@ class DocumentImageClassifier(LightningModule):
         predictions = self(images)
         return argmax(predictions, dim=1)
 
-    def configure_optimizers(self) -> optim.Optimizer:
+    def configure_optimizers(self) -> tuple:
         """
         옵티마이저 설정
-        :return: Adam 옵티마이저 반환
+        :return: Adam 옵티마이저, 학습률 스케쥴러
         """
-        return optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
+        optimizer = optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
+        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=1e-4)
+        return [optimizer], [scheduler]

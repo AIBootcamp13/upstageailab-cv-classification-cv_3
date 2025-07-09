@@ -19,12 +19,12 @@ def parse_args():
     parser.add_argument(
         "--model-name",
         type=str,
-        default="resnet34",
-        help="timm 기준의 사전학습된 모델 이름(예시. efficientnet_b4, convnext_tiny 등)",
+        default="convnextv2_tiny",
+        help="timm 기준의 사전학습된 모델 이름(예시. convnext_tiny, convnext_small 등)",
     )
-    parser.add_argument("--learning-rate", type=float, default=1e-3, help="학습률")
-    parser.add_argument("--batch-size", type=int, default=64, help="학습한 데이터의 배치 사이즈")
-    parser.add_argument("--epochs", type=int, default=10, help="학습한 epochs")
+    parser.add_argument("--learning-rate", type=float, default=5e-4, help="학습률")
+    parser.add_argument("--batch-size", type=int, default=16, help="학습한 데이터의 배치 사이즈")
+    parser.add_argument("--epochs", type=int, default=100, help="학습한 epochs")
 
     # Data arguments
     parser.add_argument("--val-rate", type=float, default=0.2, help="검증 데이터 나누는 비율")
@@ -96,7 +96,6 @@ def main():
         max_epochs=args.epochs,
         callbacks=callbacks,
         logger=loggers,
-        log_every_n_steps=max(1, args.epochs // 5),
     )
     logger.info("trainer 정의 완료")
 

@@ -12,7 +12,7 @@ def get_loggers(experiment_name: str) -> list[logger.Logger]:
         project=config.WANDB_PROJECT,
         entity=config.WANDB_ENTITY,
         name=experiment_name,
-        dir=config.RAW_DATA_DIR,
-        log_model=True,
+        save_dir=config.RAW_DATA_DIR,
+        log_model=False,
     )
     return [csv_logger, wandb_logger]
