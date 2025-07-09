@@ -17,7 +17,7 @@ check_gpu_memory
 
 # ConvNeXtV2 Tiny 실험들
 echo "[1/8] ConvNeXtV2 Tiny - 빠른 베이스라인 (개선)"
-python train.py \
+python src/script/train.py \
     --model-name convnextv2_tiny \
     --learning-rate 1.5e-4 \
     --batch-size 64 \
@@ -32,7 +32,7 @@ python train.py \
     2>&1 | tee "$LOG_DIR/tiny_baseline_improved.log"
 
 echo "[2/8] ConvNeXtV2 Tiny - 강한 정규화 (수정)"
-python train.py \
+python src/script/train.py \
     --model-name convnextv2_tiny \
     --learning-rate 1e-4 \
     --batch-size 48 \
@@ -48,7 +48,7 @@ python train.py \
     2>&1 | tee "$LOG_DIR/tiny_strong_reg_fixed.log"
 
 echo "[3/8] ConvNeXtV2 Tiny - 효율적 대용량 배치 (수정)"
-python train.py \
+python src/script/train.py \
     --model-name convnextv2_tiny \
     --learning-rate 2e-4 \
     --batch-size 80 \
@@ -64,7 +64,7 @@ python train.py \
     2>&1 | tee "$LOG_DIR/tiny_efficient_batch.log"
 
 echo "[4/8] ConvNeXtV2 Tiny - 증강 비교 베이스라인"
-python train.py \
+python src/script/train.py \
     --model-name convnextv2_tiny \
     --learning-rate 1.2e-4 \
     --batch-size 64 \
@@ -81,7 +81,7 @@ python train.py \
 
 # ConvNeXtV2 Base 실험들 (RTX 3090 최적화)
 echo "[5/8] ConvNeXtV2 Base - RTX 3090 최적화"
-python train.py \
+python src/script/train.py \
     --model-name convnextv2_base \
     --learning-rate 8e-5 \
     --batch-size 20 \
@@ -97,7 +97,7 @@ python train.py \
     2>&1 | tee "$LOG_DIR/base_rtx3090_optimized.log"
 
 echo "[6/8] ConvNeXtV2 Base - 안전한 최대 배치 (수정)"
-python train.py \
+python src/script/train.py \
     --model-name convnextv2_base \
     --learning-rate 6e-5 \
     --batch-size 24 \
@@ -113,7 +113,7 @@ python train.py \
     2>&1 | tee "$LOG_DIR/base_safe_max.log"
 
 echo "[7/8] ConvNeXtV2 Base - 고성능 긴 학습 (개선)"
-python train.py \
+python src/script/train.py \
     --model-name convnextv2_base \
     --learning-rate 4e-5 \
     --batch-size 16 \
@@ -130,7 +130,7 @@ python train.py \
     2>&1 | tee "$LOG_DIR/base_high_performance.log"
 
 echo "[8/8] ConvNeXtV2 Base - 균형잡힌 Step LR (개선)"
-python train.py \
+python src/script/train.py \
     --model-name convnextv2_base \
     --learning-rate 8e-5 \
     --batch-size 18 \
