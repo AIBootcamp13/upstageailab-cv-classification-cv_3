@@ -75,3 +75,31 @@ NCLOUD_STORAGE_PERSONAL_DIR = get_env_or_raise("NCLOUD_STORAGE_BUCKET_PERSONAL_D
 WANDB_API_KEY = get_env_or_raise("WANDB_API_KEY")
 WANDB_PROJECT = get_env_or_raise("WANDB_PROJECT")
 WANDB_ENTITY = get_env_or_raise("WANDB_ENTITY")
+
+# %%
+TRAINED_MODEL_CONFIGS = [
+    {
+        "checkpoint_path": CHECKPOINT_DIR / "20250710125544_convnextv2_base_lr8e-05_ep80.ckpt",
+        "model_name": "convnextv2_base",
+        "weight": 0.65,
+        "description": "convnextv2_base_lr8e-05_ep80",
+    },
+    {
+        "checkpoint_path": CHECKPOINT_DIR / "convnextv2_base_lr4e-05_ep120.ckpt",
+        "model_name": "convnextv2_base",
+        "weight": 0.3,
+        "description": "convnextv2_base_lr4e-05_ep120",
+    },
+    {
+        "checkpoint_path": CHECKPOINT_DIR / "convnextv2_base_lr5e-05_ep150.ckpt",
+        "model_name": "convnextv2_base",
+        "weight": 0.2,
+        "description": "convnextv2_tiny_lr0.0001_ep70",
+    },
+    {
+        "checkpoint_path": CHECKPOINT_DIR / "convnextv2_base_lr6e-05_ep100.ckpt",
+        "model_name": "convnextv2_base",
+        "weight": 0.15,
+        "description": "convnextv2_tiny_lr0.00015_ep50",
+    },
+]

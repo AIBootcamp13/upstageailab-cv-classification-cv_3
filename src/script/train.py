@@ -4,9 +4,6 @@ import pytorch_lightning as pl
 import wandb
 from torch import nn
 
-from src.training.losses import LabelSmoothingCrossEntropy
-from src.training.losses import FocalLoss
-
 from src.data.datamodules import DocumentImageDataModule
 from src.data.datasets import DocumentImageSet
 from src.model.classifier import DocumentImageClassifier
@@ -99,9 +96,9 @@ def main():
     logger.info("DataModule 준비 완료")
 
     # 손실함수 정의
-    criterion = nn.CrossEntropyLoss()
-    # criterion = LabelSmoothingCrossEntropy(smoothing=0.1)
-    # criterion = FocalLoss(gamma=2.0)
+    criterion = (
+        nn.CrossEntropyLoss(label_smoothing=args.label_smoothing) if args.label_smoothing else nn.CrossEntropyLoss()
+    )
 
     # model 정의
     model = DocumentImageClassifier(
@@ -111,13 +108,12 @@ def main():
         weight_decay=args.weight_decay,
         drop_rate=args.drop_rate,
         drop_path_rate=args.drop_path_rate,
-        criterion=None,
+        criterion=criterion,
         pretrained=True,
         optimizer_name=args.optimizer,
         scheduler_name=args.scheduler,
         warmup_epochs=args.warmup_epochs,
         max_epochs=args.epochs,
-        label_smoothing=args.label_smoothing,
         mixup_alpha=args.mixup_alpha,
         cutmix_alpha=args.cutmix_alpha,
     )

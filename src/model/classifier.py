@@ -10,18 +10,15 @@ class DocumentImageClassifier(LightningModule):
         model_name: str,
         num_classes: int,
         learning_rate: float,
-        weight_decay: float = 0.05,  # weight_decay 추가
-        drop_rate: float = 0.0,  # dropout rate 추가
-        drop_path_rate: float = 0.0,  # drop path rate 추가
-        criterion: nn.Module | None = None,
+        criterion: nn.Module = None,
+        weight_decay: float = 0.05,
+        drop_rate: float = 0.0,
+        drop_path_rate: float = 0.0,
         pretrained: bool = True,
-        # 옵티마이저 및 스케줄러 설정
         optimizer_name: str = "adamw",
         scheduler_name: str = "cosine",
         warmup_epochs: int = 5,
         max_epochs: int = 100,
-        # 추가 정규화 옵션들
-        label_smoothing: float = 0.0,
         mixup_alpha: float = 0.0,
         cutmix_alpha: float = 0.0,
     ):
@@ -38,15 +35,6 @@ class DocumentImageClassifier(LightningModule):
             drop_rate=self.hparams.drop_rate,  # 일반 dropout
             drop_path_rate=self.hparams.drop_path_rate,  # stochastic depth
         )
-
-        # 손실 함수 설정 (label smoothing 포함)
-        if criterion is None:
-            if self.hparams.label_smoothing > 0:
-                self.criterion = nn.CrossEntropyLoss(label_smoothing=self.hparams.label_smoothing)
-            else:
-                self.criterion = nn.CrossEntropyLoss()
-        else:
-            self.criterion = criterion
 
         # 메트릭 설정 - torchmetrics가 자동으로 상태 관리
         self.train_accuracy = torchmetrics.Accuracy(task="multiclass", num_classes=self.hparams.num_classes)
