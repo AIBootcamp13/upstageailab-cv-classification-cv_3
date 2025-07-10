@@ -3,12 +3,15 @@ from pytorch_lightning.callbacks import Callback, EarlyStopping, LearningRateMon
 from src import config
 
 
-def get_callbacks(monitor: str = "val_f1") -> list[Callback]:
+def get_callbacks(experiment_name: str, monitor: str = "val_f1") -> list[Callback]:
+    checkpoint_dir = config.CHECKPOINT_DIR / experiment_name
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
     return [
         # 모델 체크포인트 저장
         ModelCheckpoint(
-            dirpath=config.CHECKPOINT_DIR,  # 체크포인트 파일을 저장할 디렉토리 경로
-            filename="{epoch:02d}-{val_loss:.2f}",  # 체크포인트 파일명 패턴
+            dirpath=checkpoint_dir,  # 체크포인트 파일을 저장할 디렉토리 경로
+            filename="{epoch:02d}-{val_f1:.3f}-{val_loss:.3f}",  # 체크포인트 파일명 패턴
             monitor=monitor,  # 모니터링할 메트릭 이름 (예: 'val_loss', 'val_accuracy')
             mode="min" if "loss" in monitor else "max",  # 메트릭 최적화 방향 ('min' 또는 'max')
             save_top_k=1,  # 저장할 최고 성능 모델 개수 (-1이면 모든 체크포인트 저장)
@@ -19,7 +22,7 @@ def get_callbacks(monitor: str = "val_f1") -> list[Callback]:
         EarlyStopping(
             monitor=monitor,  # 모니터링할 메트릭 이름
             mode="min" if "loss" in monitor else "max",  # 메트릭 최적화 방향 ('min' 또는 'max')
-            patience=2,  # 개선이 없어도 기다릴 에포크 수
+            patience=5,  # 개선이 없어도 기다릴 에포크 수
             verbose=True,  # 로그 출력 여부
         ),
         # 학습률 모니터링

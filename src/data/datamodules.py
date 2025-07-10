@@ -14,6 +14,7 @@ class DocumentImageDataModule(LightningDataModule):
         batch_size: int,
         train_transform: Callable,
         test_transform: Callable,
+        with_augmentation: bool = False,
         val_rate: float = 0.2,
         stratify: bool = True,
         random_seed: int = 32,
@@ -33,6 +34,7 @@ class DocumentImageDataModule(LightningDataModule):
         self.batch_size = batch_size
         self.train_transform = train_transform
         self.test_transform = test_transform
+        self.with_augmentation = with_augmentation
         self.val_rate = val_rate
         self.stratify = stratify
         self.random_seed = random_seed
@@ -92,7 +94,7 @@ class DocumentImageDataModule(LightningDataModule):
         prepare_data()와 달리 모든 프로세스에서 실행되므로 다운로드 작업은 피해야 합니다.
         """
         if stage == "fit" or stage is None:
-            total_train_dataset = DocumentImageSet.create_train_dataset(self.train_transform)
+            total_train_dataset = self._choose_train_dataset()
             train_indices, val_indices = self._split_train_val_indices(total_train_dataset)
 
             self.train_dataset = Subset(total_train_dataset, train_indices)
@@ -101,7 +103,7 @@ class DocumentImageDataModule(LightningDataModule):
             self.test_dataset = DocumentImageSet.create_test_dataset(self.test_transform)
             self.predict_dataset = DocumentImageSet.create_test_dataset(self.test_transform)
         elif stage == "validate":
-            total_train_dataset = DocumentImageSet.create_train_dataset(self.train_transform)
+            total_train_dataset = self._choose_train_dataset()
             _, val_indices = self._split_train_val_indices(total_train_dataset)
             self.val_dataset = Subset(total_train_dataset, val_indices)
         elif stage == "test":
@@ -189,6 +191,13 @@ class DocumentImageDataModule(LightningDataModule):
             shuffle=False,
             num_workers=self.num_workers,
             pin_memory=self.pin_memory,
+        )
+
+    def _choose_train_dataset(self) -> DocumentImageSet:
+        return (
+            DocumentImageSet.create_augmented_train_dataset(self.train_transform)
+            if self.with_augmentation
+            else DocumentImageSet.create_train_dataset(self.test_transform)
         )
 
     def _split_train_val_indices(self, dataset: DocumentImageSet) -> tuple[list[int], list[int]]:

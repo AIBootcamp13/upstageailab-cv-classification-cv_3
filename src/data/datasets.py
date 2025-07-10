@@ -4,9 +4,12 @@ from typing import Self
 
 import pandas as pd
 import torch
+from pandas import read_csv
 from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
+
+from src import config
 
 
 class DocumentImageSet(Dataset):
@@ -60,9 +63,16 @@ class DocumentImageSet(Dataset):
         )
 
     @classmethod
-    def create_test_dataset(cls, img_transform: Callable) -> Self:
-        from src import config
+    def create_augmented_train_dataset(cls, img_transform: Callable) -> Self:
+        return cls(
+            meta_csv_filepath=config.RAW_DATA_DIR / "augment.csv",
+            img_directory=config.RAW_DATA_DIR / "augment",
+            class_meta_csv_filepath=config.CLASS_META_CSV_PATH,
+            img_transform=img_transform if img_transform else transforms.ToTensor(),
+        )
 
+    @classmethod
+    def create_test_dataset(cls, img_transform: Callable) -> Self:
         return cls(
             meta_csv_filepath=config.TEST_META_CSV_PATH,
             img_directory=config.TEST_IMG_DIR,
@@ -72,9 +82,5 @@ class DocumentImageSet(Dataset):
 
     @classmethod
     def calculate_metadata_classes(cls) -> int:
-        from pandas import read_csv
-
-        from src import config
-
         meta_df = read_csv(config.CLASS_META_CSV_PATH)
         return meta_df[cls.COLUMN_CLASS].nunique()
