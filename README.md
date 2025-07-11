@@ -1,5 +1,15 @@
 # Document Image Classification Project
 
+## Overview
+
+이번 대회는 **문서 타입 분류**를 위한 이미지 분류 대회를 위한 프로젝트입니다.
+
+- **태스크**: 17개 클래스의 문서 이미지 분류
+- **도메인**: Computer Vision - Image Classification
+- **활용 분야**: 금융, 의료, 보험, 물류 등 산업 전반의 문서 자동화 처리
+- **데이터**: 실제 현업에서 사용하는 데이터를 기반으로 제작
+- **평가 지표**: Macro F1 Score
+
 ## Team
 
 | [조의영](https://github.com/yuiyeong) | [김두환](https://github.com/korea202a) | [나주영](https://github.com/najuyoung) | [조재형](https://github.com/Bitefriend) |
@@ -8,101 +18,8 @@
 
 ## 0. Getting Started
 
-### Quick Setup for Cloud Instance
-
 - 본 프로젝트는 클라우드 인스턴스에서 진행됩니다.
 - 다음 단계를 따라 환경을 설정하고 프로젝트를 시작하세요.
-
-#### 1. 환경 설정
-
-클라우드 인스턴스에 접속한 후, 다음 명령어를 실행하여 개발 환경을 자동으로 설정합니다,
-
-```bash
-# 환경 설정 스크립트 다운로드 및 실행
-wget https://gist.githubusercontent.com/yuiyeong/8ae3f167e97aeff90785a4ccda41e5fe/raw/d5e030ea64bbd9c41ce2b4c825bc03c86f0c3dac/setup_env.sh
-chmod +x setup_env.sh
-./setup_env
-```
-
-**설정 내용:**
-
-- Python 3.11 conda 환경 (py311) 생성
-- Poetry 설치 및 PATH 설정
-- /workspace 작업 디렉토리 생성
-- SSH 로그인 시 자동으로 /workspace로 이동
-
-#### 2. 환경 적용
-
-스크립트 실행 후 SSH를 재접속하여 변경사항을 적용합니다.
-
-```bash
-# SSH 재접속 후 환경 확인
-python --version  # Python 3.11.x 확인
-poetry --version  # Poetry 설치 확인
-pwd              # /workspace 확인
-```
-
-#### 3. Git Config
-
-- 다음 명령어를 실행하여 git config 를 설정합니다.
-- `{username}` 과 `{emailaddr}` 에 본인의 github name 과 email 을 적어주세요
-
-```bash
-git config --global user.name "{username}"
-git config --global user.email "{emailaddr}"
-git config --global core.editor "vim"
-git config --global core.pager "cat"
-```
-
-- 설정된 내용은 `git config --list` 로 확인합니다.
-- 수정이 필요할 경우, `vi ~/.gitconfig` 를 실행해서 값을 수정합니다.
-
-#### 4. 프로젝트 복제 및 설정
-
-```bash
-# /workspace 디렉토리에서 프로젝트 복제
-cd /workspace
-git clone https://github.com/AIBootcamp13/upstageailab-cv-classification-cv_3.git
-cd upstageailab-cv-classification-cv-3
-
-# Poetry를 사용하여 의존성 설치
-poetry install
-```
-
-#### 5. 환경 변수 설정
-
-```bash
-# 환경 변수 템플릿 파일 복사
-cp .env.template .env
-
-# 환경 변수 파일 편집
-vi .env
-```
-
-**필요한 환경 변수:**
-
-- `PYTHONPATH`: 프로젝트 루트 경로 설정
-- `NCLOUD_ACCESS_KEY`: Naver Cloud Storage 접근 키
-- `NCLOUD_SECRET_KEY`: Naver Cloud Storage 시크릿 키
-- `NCLOUD_STORAGE_REGION`: Naver Cloud Storage 리전
-- `NCLOUD_STORAGE_ENDPOINT_URL`: Naver Cloud Storage 엔드포인트
-- `NCLOUD_STORAGE_BUCKET`: Naver Cloud Storage 버킷명
-- `NCLOUD_STORAGE_BUCKET_PERSONAL_DIR`: 개인 디렉토리 경로
-- `WANDB_API_KEY`: Weights & Biases API 키
-- `WANDB_ENTITY`: Weights & Biases 엔터티
-- `WANDB_PROJECT`: Weights & Biases 프로젝트명
-
-#### 6. 데이터 다운로드
-
-```bash
-# 데이터 다운로드 (대회 페이지에서 URL 확인)
-wget [DATA_URL] -O data.tar.gz
-
-# 압축 해제
-tar -zxvf data.tar.gz
-
-mv data/ upstageailab-cv-classification-cv-3/data/raw
-```
 
 ### Environment
 
@@ -127,24 +44,100 @@ mv data/ upstageailab-cv-classification-cv-3/data/raw
 - `wandb>=0.20.1` - 실험 추적 및 관리
 - `boto3>=1.38.46` - AWS SDK (데이터 다운로드용)
 
-**설치 방법**
+### 1. 환경 설정
+
+- 클라우드 인스턴스에 접속한 후, 다음 명령어를 실행하여 개발 환경을 자동으로 설정합니다,
 
 ```bash
-# script 로 instance 환경 설정 후
+# 환경 설정 스크립트 다운로드 및 실행
+wget https://gist.githubusercontent.com/yuiyeong/8ae3f167e97aeff90785a4ccda41e5fe/raw/d5e030ea64bbd9c41ce2b4c825bc03c86f0c3dac/setup_env.sh
+
+chmod +x setup_env.sh
+./setup_env
+```
+
+**설정 내용**
+
+- [init-cloud-instance.sh](scripts/init-cloud-instance.sh)
+- Python 3.11 conda 환경 (py311) 생성
+- Poetry 설치 및 PATH 설정
+- /workspace 작업 디렉토리 생성
+- SSH 로그인 시 자동으로 /workspace로 이동
+
+### 2. 환경 적용
+
+스크립트 실행 후 SSH를 재접속하여 변경사항을 적용합니다.
+
+```bash
+# SSH 재접속 후 환경 확인
+python --version  # Python 3.11.x 확인
+poetry --version  # Poetry 설치 확인
+pwd              # /workspace 확인
+```
+
+### 3. Git Config
+
+- 다음 명령어를 실행하여 git config 를 설정합니다.
+- `{username}` 과 `{emailaddr}` 에 본인의 github name 과 email 을 적어주세요
+
+```bash
+git config --global user.name "{username}"
+git config --global user.email "{emailaddr}"
+git config --global core.editor "vim"
+git config --global core.pager "cat"
+```
+
+- 설정된 내용은 `git config --list` 로 확인합니다.
+- 수정이 필요할 경우, `vi ~/.gitconfig` 를 실행해서 값을 수정합니다.
+
+### 4. 프로젝트 복제 및 설정
+
+```bash
+# /workspace 디렉토리에서 프로젝트 복제
+cd /workspace
+git clone https://github.com/AIBootcamp13/upstageailab-cv-classification-cv_3.git
+cd upstageailab-cv-classification-cv-3
+
+# Poetry를 사용하여 의존성 설치
 poetry install
 ```
 
+### 5. 환경 변수 설정
+
+```bash
+# 환경 변수 템플릿 파일 복사
+cp .env.template .env
+
+# 환경 변수 파일 편집
+vi .env
+```
+
+**필요한 환경 변수**
+
+- `PYTHONPATH`: 프로젝트 루트 경로 설정
+- `NCLOUD_ACCESS_KEY`: Naver Cloud Storage 접근 키
+- `NCLOUD_SECRET_KEY`: Naver Cloud Storage 시크릿 키
+- `NCLOUD_STORAGE_REGION`: Naver Cloud Storage 리전
+- `NCLOUD_STORAGE_ENDPOINT_URL`: Naver Cloud Storage 엔드포인트
+- `NCLOUD_STORAGE_BUCKET`: Naver Cloud Storage 버킷명
+- `NCLOUD_STORAGE_BUCKET_PERSONAL_DIR`: 개인 디렉토리 경로
+- `WANDB_API_KEY`: Weights & Biases API 키
+- `WANDB_ENTITY`: Weights & Biases 엔터티
+- `WANDB_PROJECT`: Weights & Biases 프로젝트명
+
+### 6. 대회 데이터 다운로드
+
+```bash
+# 데이터 다운로드 (대회 페이지에서 URL 확인)
+wget [DATA_URL] -O data.tar.gz
+
+# 압축 해제
+tar -zxvf data.tar.gz
+
+mv data/ upstageailab-cv-classification-cv-3/data/raw
+```
+
 ## 1. Competition Info
-
-### Overview
-
-이번 대회는 **문서 타입 분류**를 위한 이미지 분류 대회입니다.
-
-- **태스크**: 17개 클래스의 문서 이미지 분류
-- **도메인**: Computer Vision - Image Classification
-- **활용 분야**: 금융, 의료, 보험, 물류 등 산업 전반의 문서 자동화 처리
-- **데이터**: 실제 현업에서 사용하는 데이터를 기반으로 제작
-- **평가 지표**: Macro F1 Score
 
 ### Dataset Statistics
 
@@ -202,65 +195,25 @@ poetry install
 ├── src/                            # 소스 코드 메인 디렉토리
 │   ├── config/                     # 설정 관련 모듈
 │   ├── data/                       # 데이터 로더 및 데이터셋 관련
-│   │   ├── datamodules.py          # PyTorch Lightning 의 데이터 모듈
-│   │   └── datasets.py             # 커스텀 데이터셋 클래스
 │   ├── libs/                       # 공통 라이브러리 및 유틸리티
-│   │   └── storage.py              # 클라우드 스토리지 관련 기능
 │   ├── model/                      # 모델 정의 및 구현
-│   │   └── classifier.py           # 이미지 분류 모델을 pytorch lightning 을 이용해서 정의
 │   ├── script/                     # 실행 스크립트
-│   │   ├── extract_image_features.py  # 이미지 피처 추출
-│   │   ├── predict.py              # 예측 스크립트
-│   │   └── train.py                # 학습 스크립트
 │   ├── training/                   # 훈련 관련 모듈
-│   │   ├── callbacks.py            # PyTorch Lightning 콜백
-│   │   └── loggers.py              # 로깅 관련 설정
 │   ├── transforms/                 # 이미지 변환 및 증강
-│   │   └── factory.py              # 변환 팩토리 클래스
 │   └── util/                       # 유틸리티 함수 모음
-│       ├── helper.py               # 헬퍼 함수들
-│       └── log.py                  # 로깅 유틸리티
 ├── .env.template                   # 환경 변수 템플릿 파일
 └── pyproject.toml                  # Poetry 의존성 관리 파일
 ```
 
-### Core Components
+제공해주신 세 개의 스크립트를 바탕으로 "스크립트 사용법" 섹션을 업데이트하겠습니다.
 
-#### 1. 데이터 처리 (`src/data/`)
+### 스크립트 사용법
 
-- **datamodules.py**: PyTorch Lightning 데이터 모듈 구현
-- **datasets.py**: 커스텀 데이터셋 클래스 및 데이터 로딩 로직
+- `src/script` 디렉토리에 있는 세 가지 주요 스크립트의 사용법을 설명합니다.
 
-#### 2. 모델 (`src/model/`)
+#### 1. src/script/train.py
 
-- **classifier.py**: 이미지 분류 모델 정의 및 구현
-
-#### 3. 훈련 (`src/training/`)
-
-- **callbacks.py**: 모델 체크포인트, 얼리 스토핑 등 PyTorch Lightning 콜백
-- **loggers.py**: Weights & Biases 로거 설정
-
-#### 4. 데이터 변환 (`src/transforms/`)
-
-- **factory.py**: 이미지 전처리 및 증강 변환 팩토리
-
-#### 5. 스크립트 (`src/script/`)
-
-- **train.py**: 모델 훈련 메인 스크립트
-- **predict.py**: 예측 및 추론 스크립트
-- **extract_image_features.py**: 이미지 피처 추출 스크립트
-
-#### 6. 유틸리티 (`src/util/`, `src/libs/`)
-
-- **helper.py**: 공통 헬퍼 함수들
-- **log.py**: 로깅 관련 유틸리티
-- **storage.py**: Naver Cloud Storage 업로드/다운로드 기능
-
-## 스크립트 사용법
-
-- `src/script` 에 있는 스크립트 사용법
-
-### src/script/train.py
+모델 학습을 위한 스크립트입니다.
 
 ```bash
 python src/script/train.py \
@@ -270,24 +223,49 @@ python src/script/train.py \
     --epochs 50 \
     --val-rate 0.2 \
     --num-workers 8 \
-    --pin_memory True \
+    --pin-memory \
     --seed 4321 \
     --checkpoint-path /path/to/checkpoint.ckpt
 ```
 
-#### 각 argument 설명:
+##### 주요 Arguments
 
-- `--model-name`: timm 기준의 사전학습된 모델 이름 (예: efficientnet_b4, convnext_tiny 등)
-- `--learning-rate`: 학습률 (기본값: 1e-3)
-- `--batch-size`: 학습 배치 사이즈 (기본값: 64)
-- `--epochs`: 학습 에포크 수 (기본값: 10)
+**모델 관련**
+
+- `--model-name`: timm 기준 사전학습된 모델 이름 (기본값: convnextv2_atto)
+- `--learning-rate`: 학습률 (기본값: 5e-4)
+- `--weight-decay`: 가중치 감소율 (기본값: 0.05)
+- `--drop-rate`: 드롭아웃 비율 (기본값: 0.1)
+- `--drop-path-rate`: 드롭 패스 비율 (기본값: 0.1)
+
+**학습 관련**
+
+- `--batch-size`: 배치 사이즈 (기본값: 16)
+- `--epochs`: 학습 에포크 수 (기본값: 100)
+- `--optimizer`: 옵티마이저 선택 (기본값: adamw, 선택: adamw, adam)
+- `--scheduler`: 학습률 스케줄러 (기본값: cosine, 선택: cosine, cosine_warm_restarts, step, exponential)
+- `--warmup-epochs`: 웜업 에포크 수 (기본값: 5)
+
+**정규화 관련**
+
+- `--label-smoothing`: 라벨 스무딩 계수 (기본값: 0.1)
+- `--mixup-alpha`: MixUp 알파 값 (기본값: 0.2, 0으로 설정하면 비활성화)
+- `--cutmix-alpha`: CutMix 알파 값 (기본값: 0.0, 0으로 설정하면 비활성화)
+
+**데이터 관련**
+
 - `--val-rate`: 검증 데이터 분할 비율 (기본값: 0.2)
 - `--num-workers`: 데이터 로딩 워커 수 (기본값: 4)
-- `--pin_memory`: 데이터 로딩에 pin_memory 사용 여부 (기본값: False)
+- `--pin-memory`: 데이터 로딩 시 pin_memory 사용 (플래그)
+
+**기타**
+
 - `--seed`: 랜덤 시드 설정 (기본값: 4321)
 - `--checkpoint-path`: 체크포인트에서 시작할 경우 경로 (기본값: None)
 
-### 모델 예측 명령어 (predict.py)
+#### 2. src/script/predict.py
+
+단일 모델을 사용한 예측을 위한 스크립트입니다.
 
 ```bash
 python src/script/predict.py \
@@ -298,23 +276,54 @@ python src/script/predict.py \
     --seed 4321
 ```
 
-#### 각 argument 설명:
+##### 주요 Arguments
 
 - `--checkpoint-path`: **필수** - 학습된 모델 체크포인트 경로
 - `--batch-size`: 예측 배치 사이즈 (기본값: 64)
 - `--num-workers`: 데이터 로딩 워커 수 (기본값: 4)
-- `--pin-memory`: 데이터 로딩에 pin_memory 사용 (플래그, 기본값: False)
+- `--pin-memory`: 데이터 로딩 시 pin_memory 사용 (플래그, 기본값: False)
 - `--seed`: 랜덤 시드 설정 (기본값: 4321)
 
-### 실제 사용 예시
+#### 3. src/script/predict_with_ensemble.py
 
-#### 1. 기본 훈련 (최소 필수 argument만 사용)
+여러 모델을 결합한 앙상블 예측을 위한 스크립트입니다.
 
 ```bash
-python src/script/train.py --model-name resnet34
+python src/script/predict_with_ensemble.py \
+    --ensemble-method soft_voting \
+    --batch-size 32 \
+    --num-workers 4 \
+    --pin-memory \
+    --seed 4321 \
+    --output-suffix my_ensemble
 ```
 
-#### 2. 고성능 훈련 (모든 argument 최적화)
+##### 주요 Arguments
+
+**앙상블 관련**
+
+- `--ensemble-method`: 앙상블 방법 (기본값: hard_voting, 선택: soft_voting, hard_voting, weighted_average)
+- `--output-suffix`: 출력 파일명 접미사 (기본값: ensemble)
+
+**데이터 로딩 관련**
+
+- `--batch-size`: 예측 배치 사이즈 (기본값: 32, 앙상블 시 작게 설정 권장)
+- `--num-workers`: 데이터 로딩 워커 수 (기본값: 4)
+- `--pin-memory`: 데이터 로딩 시 pin_memory 사용 (플래그, 기본값: False)
+
+**기타**
+
+- `--seed`: 랜덤 시드 설정 (기본값: 4321)
+
+### 실사용 예시
+
+#### 기본 학습 (최소 필수 arguments)
+
+```bash
+python src/script/train.py --model-name efficientnet_b4
+```
+
+#### 고성능 학습 (모든 arguments 최적화)
 
 ```bash
 python src/script/train.py \
@@ -324,11 +333,14 @@ python src/script/train.py \
     --epochs 100 \
     --val-rate 0.15 \
     --num-workers 12 \
-    --pin_memory True \
-    --seed 42
+    --pin-memory \
+    --seed 42 \
+    --label-smoothing 0.1 \
+    --mixup-alpha 0.3 \
+    --weight-decay 0.01
 ```
 
-#### 3. 체크포인트에서 재시작
+#### 체크포인트에서 재시작
 
 ```bash
 python src/script/train.py \
@@ -339,14 +351,7 @@ python src/script/train.py \
     --checkpoint-path ./data/checkpoints/best_model.ckpt
 ```
 
-#### 4. 기본 예측
-
-```bash
-python src/script/predict.py \
-    --checkpoint-path ./data/checkpoints/best_model.ckpt
-```
-
-#### 5. 최적화된 예측
+#### 단일 모델 예측
 
 ```bash
 python src/script/predict.py \
@@ -357,17 +362,25 @@ python src/script/predict.py \
     --seed 42
 ```
 
-**참고사항**
-
-- `train.py`에서 `--checkpoint-path`는 선택사항이며, 체크포인트에서 재시작할 때만 사용합니다.
-- `predict.py`에서 `--checkpoint-path`는 **필수** argument입니다.
-
-#### 피처 추출
+#### 앙상블 예측
 
 ```bash
-# 이미지 피처 추출
-python src/script/extract_image_features.py
+python src/script/predict_with_ensemble.py \
+    --ensemble-method soft_voting \
+    --batch-size 32 \
+    --num-workers 8 \
+    --pin-memory \
+    --seed 42 \
+    --output-suffix final_ensemble
 ```
+
+#### 중요 참고사항
+
+- train.py: `--checkpoint-path`는 선택사항이며, 체크포인트에서 재시작할 때만 사용합니다.
+- predict.py: `--checkpoint-path`는 필수 argument입니다.
+- predict_with_ensemble.py: 앙상블할 모델들의 설정은 `src/config.py`의 `TRAINED_MODEL_CONFIGS`에서 미리 정의되어 있어야 합니다.
+- 앙상블 예측 시에는 메모리 사용량이 많아지므로 `--batch-size`를 작게 설정하는 것을 권장합니다.
+- 모든 스크립트는 `--pin-memory` 플래그를 사용하여 GPU 메모리 전송 속도를 향상시킬 수 있습니다.
 
 ## 3. Data Description
 
@@ -386,33 +399,19 @@ python src/script/extract_image_features.py
 - `test/`: 3,140 장의 평가용 이미지
 - `sample_submission.csv`: 제출 형식 템플릿
 
-### EDA
+## 4. EDA
 
-W.I.P.
+- [EDA 보고서](docs/report_of_eda.md)
 
-### Data Processing
+## 5. Image Augmentation
 
-W.I.P.
+- [이미지 증강 보고서](docs/make_data_with_Augraphy.md)
 
-## 4. Modeling
+## 6. Presentation
 
-W.I.P.
+- [발표 자료](docs/presentation.pdf)
 
-## 5. Result
-
-### Leader Board
-
-W.I.P.
-
-### Presentation
-
-W.I.P.
-
-## etc
-
-### Meeting Log
-
-W.I.P.
+## 7. etc
 
 ### Reference
 
