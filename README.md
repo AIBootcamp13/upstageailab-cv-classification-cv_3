@@ -20,29 +20,64 @@
 
 - 본 프로젝트는 클라우드 인스턴스에서 진행됩니다.
 - 다음 단계를 따라 환경을 설정하고 프로젝트를 시작하세요.
+  제공해주신 pyproject.toml 파일을 분석하여 README의 "Environment"와 "Requirements" 섹션을 업데이트하겠습니다.
 
 ### Environment
 
-- **OS**: Linux (CUDA 12.1 지원)
+- **OS**: macOS (Darwin) / Linux (CUDA 12.1 지원)
 - **Python**: 3.11+
-- **Deep Learning Framework**: PyTorch 2.6.0
-- **주요 라이브러리**: timm, albumentations, OpenCV, scikit-learn
+- **Package Manager**: Poetry
+- **Deep Learning Framework**: PyTorch 2.6.0 + CUDA 12.1 (Linux) / PyTorch 2.6.0 (macOS)
+- **주요 라이브러리**: timm, albumentations, OpenCV, scikit-learn, pytorch-lightning
 - **실험 관리**: Weights & Biases (wandb)
-- **클라우드 스토리지**: Naver Cloud Storage
+- **클라우드 스토리지**: Naver Cloud Storage (boto3)
 
 ### Requirements
 
 본 프로젝트는 Poetry를 사용하여 의존성을 관리합니다.
 
-**주요 의존성**
+#### 플랫폼별 PyTorch 설치
 
-- `torch>=2.6.0` - PyTorch 딥러닝 프레임워크
+- **Linux**: PyTorch 2.6.0 + CUDA 12.1 지원
+- **macOS**: PyTorch 2.6.0 (CPU/MPS 지원)
+
+#### 주요 의존성
+
+- `torch==2.6.0` / `torchvision==0.21.0` / `torchaudio==2.6.0` - PyTorch 딥러닝 프레임워크
+- `pytorch-lightning>=2.5.2` - PyTorch 고수준 훈련 프레임워크
 - `timm>=1.0.16` - 사전 훈련된 컴퓨터 비전 모델
 - `albumentations>=2.0.8` - 이미지 증강 라이브러리
 - `opencv-python>=4.11.0` - 컴퓨터 비전 라이브러리
 - `scikit-learn>=1.7.0` - 머신러닝 유틸리티
+- `scikit-image>=0.25.2` - 이미지 처리 라이브러리
+- `augraphy>=8.2.6` - 문서 이미지 증강 라이브러리
+
+#### 데이터 처리 및 분석
+
+- `numpy>=2.2.6` - 수치 연산 라이브러리
+- `pandas>=2.3.1` - 데이터 처리 및 분석
+- `matplotlib>=3.10.3` - 데이터 시각화
+- `seaborn>=0.13.2` - 통계 데이터 시각화
+- `pillow>=11.2.1` - 이미지 처리
+
+#### 실험 관리 및 도구
+
 - `wandb>=0.20.1` - 실험 추적 및 관리
-- `boto3>=1.38.46` - AWS SDK (데이터 다운로드용)
+- `boto3>=1.38.46` - AWS SDK (클라우드 스토리지)
+- `tqdm>=4.67.1` - 진행률 표시
+
+#### 개발 환경
+
+- `jupyter>=1.1.1` - Jupyter 노트북
+- `jupyterlab>=4.4.3` - JupyterLab 환경
+- `notebook>=7.4.3` - Jupyter 노트북 서버
+- `ipykernel>=6.29.5` - Jupyter 커널
+- `python-dotenv>=1.1.0` - 환경 변수 관리
+
+#### 개발 도구 (dev-dependencies)
+
+- `ruff>=0.12.0` - 코드 린팅 및 포맷팅
+- `pre-commit>=4.2.0` - Git 훅 관리
 
 ### 1. 환경 설정
 
